@@ -1,7 +1,7 @@
-import ProductCard from '../components/product-card';
-import Search from '../components/search';
+import ProductCard from '../components/product-card'
+import Search from '../components/search'
 
-export default function Home() {
+export default function Home () {
   return (
     <main className="my-8">
       <Search />
@@ -13,5 +13,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }

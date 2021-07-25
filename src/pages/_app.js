@@ -1,8 +1,8 @@
-import '../styles/globals.css';
+import '../styles/globals.css'
 
-import Cart from '../components/cart';
+import Cart from '../components/cart'
 
-function MyApp({ Component, pageProps }) {
+function MyApp ({ Component, pageProps }) {
   return (
     <div className="bg-white">
       <header>
@@ -94,7 +94,7 @@ function MyApp({ Component, pageProps }) {
         </div>
       </footer>
     </div>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

@@ -42,5 +42,5 @@ export default function CartItem() {
       </div>
       <span className="text-gray-600">20$</span>
     </div>
-  );
+  )
 }

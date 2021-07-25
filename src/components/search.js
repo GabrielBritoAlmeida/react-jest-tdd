@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-export default function Search({ doSearch }) {
-  const [term, setTerm] = useState('');
+export default function Search ({ doSearch }) {
+  const [term, setTerm] = useState('')
 
   return (
     <form
@@ -29,5 +29,5 @@ export default function Search({ doSearch }) {
         placeholder="Search"
       />
     </form>
-  );
+  )
 }
