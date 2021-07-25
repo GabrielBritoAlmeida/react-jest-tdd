@@ -48,7 +48,27 @@ describe('CartItem', () => {
     expect(screen.getByTestId('quantity').textContent).toBe('2')
   })
 
-  it.todo('should decrease quantity by 1 when second button is clicked')
+  it('should decrease quantity by 1 when second button is clicked', () => {
+    renderCartItem()
 
-  it.todo('should not go below zero in the quantity')
+    const [buttonSub, buttonAdd] = screen.getAllByRole('button')
+    const quantity = screen.getByTestId('quantity')
+
+    fireEvent.click(buttonAdd)
+    expect(quantity.textContent).toBe('2')
+
+    fireEvent.click(buttonSub)
+    expect(quantity.textContent).toBe('1')
+  })
+
+  it('should not go below zero in the quantity', () => {
+    renderCartItem()
+
+    const [buttonSub] = screen.getAllByRole('button')
+    const quantity = screen.getByTestId('quantity')
+
+    fireEvent.click(buttonSub)
+    fireEvent.click(buttonSub)
+    expect(quantity.textContent).toBe('0')
+  })
 })
