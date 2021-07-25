@@ -3,15 +3,15 @@
  */
 
 export default function routes() {
-  this.namespace = 'api';
+  this.namespace = 'api'
 
   /*
    * A resource comprises all operations for a CRUD
    * operation. .get(), .post(), .put() and delete().
    * Mirage JS guide on Resource: https://miragejs.com/docs/route-handlers/shorthands#resource-helper
    */
-  this.resource('users');
-  this.resource('products');
+  this.resource('users')
+  this.resource('products')
 
   /*
    * From your component use fetch('api/messages?userId=<a user id>')
@@ -19,9 +19,9 @@ export default function routes() {
    */
   this.get('messages', (schema, request) => {
     const {
-      queryParams: { userId },
-    } = request;
+      queryParams: { userId }
+    } = request
 
-    return schema.messages.where({ userId });
-  });
+    return schema.messages.where({ userId })
+  })
 }

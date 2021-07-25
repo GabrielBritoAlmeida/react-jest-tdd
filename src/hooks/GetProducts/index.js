@@ -1,12 +1,16 @@
-import axios from 'axios'
-import { useCallback } from 'react'
+import { api } from '../../services/api'
+import { useCallback, useEffect, useState } from 'react'
 
 function GetProducts() {
-  const getProducts = useCallback(async ({ setProducts, setError }) => {
+  const [products, setProducts] = useState([])
+  const [error, setError] = useState(false)
+
+  const getProducts = useCallback(async () => {
     try {
-      const response = await axios.get('/products')
+      const response = await api.get('/products')
+
       if (response.status === 200) {
-        setProducts(response.data)
+        setProducts(response.data.products)
       }
     } catch (error) {
       setError(true)
@@ -14,7 +18,11 @@ function GetProducts() {
     }
   }, [])
 
-  return { getProducts }
+  useEffect(() => {
+    getProducts()
+  }, [getProducts])
+
+  return { products, error }
 }
 
 export function useGetProducts() {

@@ -1,7 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import ProductList from '../pages/index'
+import { makeServer } from '../miragejs/server'
 
 describe('ProductList', () => {
+  let server
+
+  beforeAll(() => {
+    server = makeServer({ environment: 'test' })
+  })
+
+  afterEach(() => {
+    server.shutdown()
+  })
+
   it('should render ProductList', () => {
     render(<ProductList />)
 
@@ -9,6 +20,8 @@ describe('ProductList', () => {
   })
 
   fit('should render the ProductCard component 10 times', async () => {
+    server.createList('product', 10)
+
     render(<ProductList />)
 
     await waitFor(() => {
