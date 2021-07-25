@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import CartItem from './cart-item'
 
 const product = {
@@ -29,4 +29,26 @@ describe('CartItem', () => {
     expect(componentImage).toHaveProperty('src', product.image)
     expect(componentImage).toHaveProperty('alt', product.title)
   })
+
+  it('should display 1 as initial quantity', () => {
+    renderCartItem()
+
+    const componentQuantity = screen.getByTestId('quantity')
+
+    expect(componentQuantity.textContent).toBe('1')
+  })
+
+  it('should increase quantity by 1 when second button is clicked', () => {
+    renderCartItem()
+
+    const [_, buttonAdd] = screen.getAllByRole('button')
+
+    fireEvent.click(buttonAdd)
+
+    expect(screen.getByTestId('quantity').textContent).toBe('2')
+  })
+
+  it.todo('should decrease quantity by 1 when second button is clicked')
+
+  it.todo('should not go below zero in the quantity')
 })
