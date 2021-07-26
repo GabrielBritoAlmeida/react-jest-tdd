@@ -20,6 +20,8 @@ function GetProducts() {
 
   useEffect(() => {
     getProducts()
+
+    return () => setProducts([])
   }, [getProducts])
 
   return { products, error }
