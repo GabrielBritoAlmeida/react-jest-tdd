@@ -1,9 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import ProductList from '../pages/index'
 import { makeServer } from '../../miragejs/server'
+import Response from 'miragejs'
 
-const renderProductList = (server) => {
-  server.createList('product', 10)
+const renderProductList = (server, quantity = 10) => {
+  server.createList('product', quantity)
   return render(<ProductList />)
 }
 
@@ -32,7 +33,24 @@ describe('ProductList', () => {
     expect(screen.getByTestId('product-list')).toBeInTheDocument()
   })
 
-  it.todo('should render the no products message')
+  it('should render the no products message', async () => {
+    renderProductList(server, 0)
 
-  it.todo('should render the Search component')
+    await waitFor(() => {
+      expect(screen.getByTestId('no-product')).toBeInTheDocument()
+      expect(screen.queryByTestId('product-card')).toBeNull()
+    })
+  })
+
+  it('should render the Search component', async () => {
+    server.get('products', () => new Response(500, {}, 'error'))
+
+    renderProductList(server, 0)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('server-error')).toBeInTheDocument()
+      expect(screen.queryByTestId('no-product')).toBeNull()
+      expect(screen.queryAllByTestId('product-card')).toHaveLength(0)
+    })
+  })
 })
