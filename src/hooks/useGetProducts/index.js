@@ -9,6 +9,7 @@ function GetProducts() {
     try {
       const response = await api.get('/products')
 
+      /* istanbul ignore next */
       if (response.status === 200) {
         setProducts(response.data.products)
       }

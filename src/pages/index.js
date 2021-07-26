@@ -1,6 +1,6 @@
 import ProductCard from '../components/product-card'
 import Search from '../components/search'
-import { useGetProducts } from '../hooks/GetProducts'
+import { useGetProducts } from '../hooks/useGetProducts'
 
 export default function Home() {
   const { products } = useGetProducts()
