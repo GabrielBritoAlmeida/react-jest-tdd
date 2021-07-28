@@ -6,7 +6,7 @@ import Response from 'miragejs'
 describe('useGetProducts', () => {
   let server
 
-  beforeAll(() => {
+  beforeEach(() => {
     server = makeServer({ environment: 'test' })
   })
 

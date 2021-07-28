@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import ProductList from '../pages/index'
 import { makeServer } from '../../miragejs/server'
 import Response from 'miragejs'
+import userEvent from '@testing-library/user-event'
 
 const renderProductList = (server, quantity = 10) => {
   server.createList('product', quantity)
@@ -11,7 +12,7 @@ const renderProductList = (server, quantity = 10) => {
 describe('ProductList', () => {
   let server
 
-  beforeAll(() => {
+  beforeEach(() => {
     server = makeServer({ environment: 'test' })
   })
 
@@ -51,6 +52,26 @@ describe('ProductList', () => {
       expect(screen.getByTestId('server-error')).toBeInTheDocument()
       expect(screen.queryByTestId('no-product')).toBeNull()
       expect(screen.queryAllByTestId('product-card')).toHaveLength(0)
+    })
+  })
+
+  it('should filter the product list when a search is performed', async () => {
+    const searchTerm = 'Relógio bonito'
+
+    renderProductList(server, 2)
+
+    server.create('product', {
+      title: searchTerm
+    })
+
+    const form = screen.getByRole('form')
+    const input = screen.getByRole('searchbox')
+
+    userEvent.type(input, searchTerm)
+    fireEvent.submit(form)
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('product-card')).toHaveLength(1)
     })
   })
 })

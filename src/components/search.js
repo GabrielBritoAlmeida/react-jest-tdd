@@ -1,11 +1,23 @@
 import { useState } from 'react'
 
-export default function Search ({ doSearch }) {
+export default function Search({ doSearch }) {
   const [term, setTerm] = useState('')
+
+  function submitHandler(event) {
+    event.preventDefault()
+    doSearch(term)
+  }
+
+  const inputHandler = (event) => {
+    event.preventDefault()
+    setTerm(event.target.value)
+
+    if (event.target.value === '') doSearch('')
+  }
 
   return (
     <form
-      onSubmit={() => doSearch(term)}
+      onSubmit={submitHandler}
       name="search-form"
       className="relative mt-6 max-w-lg mx-auto"
     >
@@ -23,6 +35,7 @@ export default function Search ({ doSearch }) {
 
       <input
         value={term}
+        onInput={inputHandler}
         onChange={(ev) => setTerm(ev.target.value)}
         className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
         type="search"
