@@ -90,4 +90,28 @@ describe('ProductList', () => {
       expect(screen.getByText(/1 product$/i)).toBeInTheDocument()
     })
   })
+
+  it('should display proper quantity when list is filtered', async () => {
+    const searchTerm = 'Relógio bonito'
+
+    renderProductList(server, 9)
+
+    server.create('product', {
+      title: searchTerm
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/10 products/i)).toBeInTheDocument()
+    })
+
+    const form = screen.getByRole('form')
+    const input = screen.getByRole('searchbox')
+
+    userEvent.type(input, searchTerm)
+    fireEvent.submit(form)
+
+    await waitFor(() => {
+      expect(screen.getByText(/1 product$/i)).toBeInTheDocument()
+    })
+  })
 })
