@@ -82,4 +82,12 @@ describe('ProductList', () => {
       expect(screen.getByText(/10 products/i)).toBeInTheDocument()
     })
   })
+
+  it('should display product (singular) when there is only 1 product', async () => {
+    renderProductList(server, 1)
+
+    await waitFor(() => {
+      expect(screen.getByText(/1 product$/i)).toBeInTheDocument()
+    })
+  })
 })
