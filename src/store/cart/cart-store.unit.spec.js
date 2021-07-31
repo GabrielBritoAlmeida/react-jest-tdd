@@ -1,22 +1,49 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import { useCartStore } from '.'
+import { makeServer } from '../../../miragejs/server'
 
 describe('Cart-Store', () => {
-  it('should return open equals false on initial state', () => {
-    const { result } = renderHook(() =>
-      useCartStore((store) => store.state.open)
-    )
-    expect(result.current).toBe(false)
+  let server
+  let result
+  let add
+  let toggle
+
+  beforeEach(() => {
+    server = makeServer({ environment: 'test' })
+    result = renderHook(() => useCartStore()).result
+    add = result.current.actions.add
+    toggle = result.current.actions.toggle
   })
 
-  it('should return open equals true on open', async () => {
-    const { result } = renderHook(() => useCartStore((store) => store))
+  afterEach(() => {
+    server.shutdown()
+    jest.clearAllMocks()
+    act(() => result.current.actions.reset())
+  })
 
-    const toggle = result.current.actions.toggle
+  it('should return open equals false on initial state', () => {
+    expect(result.current.state.open).toBe(false)
+  })
 
+  it('should return open equals true on open', () => {
     expect(result.current.state.open).toBe(false)
 
     act(() => toggle())
     expect(result.current.state.open).toBe(true)
+  })
+
+  it('should return an empty array for products on initial state', () => {
+    expect(result.current.state.products).toEqual([])
+    expect(result.current.state.products).toHaveLength(0)
+  })
+
+  it('should return two products in cart', async () => {
+    const products = server.createList('product', 2)
+
+    for (const product of products) {
+      act(() => add(product))
+    }
+
+    expect(result.current.state.products).toHaveLength(2)
   })
 })
