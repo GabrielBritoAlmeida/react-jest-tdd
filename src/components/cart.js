@@ -2,11 +2,12 @@ import CartItem from './cart-item'
 import { useCartStore } from '../store/cart'
 
 export default function Cart() {
-  const open = useCartStore((store) => store.state.open)
+  const { open, products } = useCartStore((store) => store.state)
   const toggle = useCartStore((store) => store.actions.toggle)
 
   return (
     <div
+      data-testid="cart"
       className={`${
         !open ? 'hidden' : ''
       } fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto bg-white border-l-2 border-gray-300`}
@@ -31,7 +32,9 @@ export default function Cart() {
         </button>
       </div>
       <hr className="my-3" />
-      <CartItem />
+      {products.map((product) => (
+        <CartItem product={product} key={product?.id} />
+      ))}
       <div className="mt-8">
         <form className="flex items-center justify-center">
           <input
