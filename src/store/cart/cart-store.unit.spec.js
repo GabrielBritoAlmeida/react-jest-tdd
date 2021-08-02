@@ -7,12 +7,14 @@ describe('Cart-Store', () => {
   let result
   let add
   let toggle
+  let remove
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
     result = renderHook(() => useCartStore()).result
     add = result.current.actions.add
     toggle = result.current.actions.toggle
+    remove = result.current.actions.remove
   })
 
   afterEach(() => {
@@ -56,5 +58,21 @@ describe('Cart-Store', () => {
     act(() => add(product))
 
     expect(result.current.state.products).toHaveLength(1)
+  })
+
+  it('should remove a product from the store ', () => {
+    const [product1, product2] = server.createList('product', 2)
+
+    act(() => {
+      add(product1)
+      add(product2)
+    })
+
+    expect(result.current.state.products).toHaveLength(2)
+
+    act(() => remove(product1))
+
+    expect(result.current.state.products).toHaveLength(1)
+    expect(result.current.state.products[0]).toEqual(product2)
   })
 })

@@ -19,16 +19,30 @@ export const useCartStore = create((set) => {
           state.open = !state.open
         })
       },
-      reset() {
-        setState((store) => {
-          store.state = initialState
-        })
-      },
+
       add(product) {
         setState(({ state }) => {
           if (!state.products.includes(product)) {
             state.products.push(product)
           }
+        })
+      },
+
+      remove(product) {
+        setState(({ state }) => {
+          const exists = state.products.includes(product)
+
+          if (exists) {
+            state.products = state.products.filter(
+              (currentProduct) => currentProduct !== product
+            )
+          }
+        })
+      },
+
+      reset() {
+        setState((store) => {
+          store.state = initialState
         })
       }
     }
