@@ -64,9 +64,11 @@ describe('Cart-Store', () => {
   it('should display 2 products cards', () => {
     const products = server.createList('product', 2)
 
-    for (const product in products) {
-      act(() => add(product))
-    }
+    act(() => {
+      for (const product of products) {
+        add(product)
+      }
+    })
 
     render(<Cart />)
 
