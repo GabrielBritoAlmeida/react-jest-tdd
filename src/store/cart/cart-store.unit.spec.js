@@ -8,6 +8,7 @@ describe('Cart-Store', () => {
   let add
   let toggle
   let remove
+  let removeAll
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
@@ -15,6 +16,7 @@ describe('Cart-Store', () => {
     add = result.current.actions.add
     toggle = result.current.actions.toggle
     remove = result.current.actions.remove
+    removeAll = result.current.actions.removeAll
   })
 
   afterEach(() => {
@@ -74,5 +76,20 @@ describe('Cart-Store', () => {
 
     expect(result.current.state.products).toHaveLength(1)
     expect(result.current.state.products[0]).toEqual(product2)
+  })
+
+  it('should clear cart ', () => {
+    const [product1, product2] = server.createList('product', 2)
+
+    act(() => {
+      add(product1)
+      add(product2)
+    })
+
+    expect(result.current.state.products).toHaveLength(2)
+
+    act(() => removeAll())
+
+    expect(result.current.state.products).toHaveLength(0)
   })
 })

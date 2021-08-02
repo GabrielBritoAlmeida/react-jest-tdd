@@ -28,6 +28,12 @@ export const useCartStore = create((set) => {
         })
       },
 
+      removeAll() {
+        setState(({ state }) => {
+          state.products = []
+        })
+      },
+
       remove(product) {
         setState(({ state }) => {
           const exists = state.products.includes(product)
