@@ -2,8 +2,11 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { screen, render } from '@testing-library/react'
 import { useCartStore } from '../store/cart'
 import { makeServer } from '../../miragejs/server'
+import { setAutoFreeze } from 'immer'
 import userEvent from '@testing-library/user-event'
 import Cart from './cart'
+
+setAutoFreeze(false)
 
 describe('Cart-Store', () => {
   let server
@@ -11,21 +14,18 @@ describe('Cart-Store', () => {
   let spyToggle
   let add
   let toggle
-  // let reset
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
     result = renderHook(() => useCartStore()).result
     add = result.current.actions.add
     toggle = result.current.actions.toggle
-    // reset = result.current.actions.reset
     spyToggle = jest.spyOn(result.current.actions, 'toggle')
   })
 
   afterEach(() => {
     server.shutdown()
     jest.clearAllMocks()
-    // act(() => reset())
   })
 
   it('should render component Cart', () => {
