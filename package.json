@@ -18,6 +18,7 @@
   "dependencies": {
     "@tailwindcss/ui": "^0.6.2",
     "axios": "^0.21.1",
+    "immer": "^9.0.5",
     "next": "10.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",

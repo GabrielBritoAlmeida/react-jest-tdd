@@ -15,6 +15,7 @@ export default function Cart() {
       <div className="flex items-center justify-between">
         <h3 className="text-2xl font-medium text-gray-700">Your cart</h3>
         <button
+          data-testid="button-close"
           onClick={() => toggle()}
           className="text-gray-600 focus:outline-none"
         >
@@ -33,7 +34,7 @@ export default function Cart() {
       </div>
       <hr className="my-3" />
       {products.map((product) => (
-        <CartItem product={product} key={product?.id} />
+        <CartItem product={product} key={product.id} />
       ))}
       <div className="mt-8">
         <form className="flex items-center justify-center">
