@@ -22,9 +22,24 @@ export const useCartStore = create((set) => {
 
       add(product) {
         setState(({ state }) => {
-          if (!state.products.includes(product)) {
+          const indexProduct = !!state.products.find(
+            ({ id }) => id === product.id
+          )
+          if (!indexProduct) {
             state.products.push(product)
             state.open = true
+          }
+        })
+      },
+
+      remove(product) {
+        setState(({ state }) => {
+          const exists = !!state.products.find(({ id }) => id === product.id)
+
+          if (exists) {
+            state.products = state.products.filter(
+              ({ id }) => id !== product.id
+            )
           }
         })
       },
@@ -32,18 +47,6 @@ export const useCartStore = create((set) => {
       removeAll() {
         setState(({ state }) => {
           state.products = []
-        })
-      },
-
-      remove(product) {
-        setState(({ state }) => {
-          const exists = state.products.includes(product)
-
-          if (exists) {
-            state.products = state.products.filter(
-              (currentProduct) => currentProduct !== product
-            )
-          }
         })
       },
 
