@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderHook } from '@testing-library/react-hooks'
 import { useCartStore } from '../store/cart'
@@ -34,49 +34,6 @@ describe('CartItem', () => {
     expect(screen.getByText(new RegExp(product.price, 'i'))).toBeInTheDocument()
     expect(componentImage).toHaveProperty('src', product.image)
     expect(componentImage).toHaveProperty('alt', product.title)
-  })
-
-  it('should display 1 as initial quantity', () => {
-    renderCartItem()
-
-    const componentQuantity = screen.getByTestId('quantity')
-
-    expect(componentQuantity.textContent).toBe('1')
-  })
-
-  it('should increase quantity by 1 when second button is clicked', () => {
-    renderCartItem()
-
-    const buttonAdd = screen.getByTestId('button-increase')
-    const quantity = screen.getByTestId('quantity')
-
-    fireEvent.click(buttonAdd)
-    expect(quantity.textContent).toBe('2')
-  })
-
-  it('should decrease quantity by 1 when second button is clicked', () => {
-    renderCartItem()
-
-    const buttonAdd = screen.getByTestId('button-increase')
-    const buttonSub = screen.getByTestId('button-decrease')
-    const quantity = screen.getByTestId('quantity')
-
-    fireEvent.click(buttonAdd)
-    expect(quantity.textContent).toBe('2')
-
-    fireEvent.click(buttonSub)
-    expect(quantity.textContent).toBe('1')
-  })
-
-  it('should not go below zero in the quantity', () => {
-    renderCartItem()
-
-    const buttonSub = screen.getByTestId('button-decrease')
-    const quantity = screen.getByTestId('quantity')
-
-    fireEvent.click(buttonSub)
-    fireEvent.click(buttonSub)
-    expect(quantity.textContent).toBe('0')
   })
 
   it('should call remove() when remove button is clicked', () => {
