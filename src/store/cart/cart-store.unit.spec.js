@@ -10,6 +10,7 @@ describe('Cart-Store', () => {
   let remove
   let removeAll
   let increase
+  let decrease
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
@@ -19,6 +20,7 @@ describe('Cart-Store', () => {
     remove = result.current.actions.remove
     removeAll = result.current.actions.removeAll
     increase = result.current.actions.increase
+    decrease = result.current.actions.decrease
   })
 
   afterEach(() => {
@@ -108,16 +110,29 @@ describe('Cart-Store', () => {
     expect(result.current.state.products).toHaveLength(1)
   })
 
-  fit('should increase quantity', () => {
-    const [product1] = server.createList('product', 2)
+  it('should increase quantity', () => {
+    const product = server.create('product')
 
     act(() => {
-      add(product1)
-      increase(product1)
+      add(product)
+      increase(product)
     })
 
-    expect(product1.quantity).toBe(2)
+    expect(product.quantity).toBe(2)
 
     expect(result.current.state.products).toHaveLength(1)
+  })
+
+  it('should decrease quantity', () => {
+    const product = server.create('product')
+
+    act(() => {
+      add(product)
+      decrease(product)
+    })
+
+    expect(product.quantity).toBe(0)
+
+    expect(result.current.state.products).toHaveLength(0)
   })
 })

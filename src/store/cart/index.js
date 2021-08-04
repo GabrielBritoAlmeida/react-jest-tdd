@@ -26,19 +26,8 @@ export const useCartStore = create((set) => {
             ({ id }) => id === product.id
           )
           if (!indexProduct) {
-            if (!product.quantity) {
-              product.quantity = 1
-            }
+            product.quantity = 1
             state.products.push(product)
-            state.open = true
-          }
-
-          if (indexProduct) {
-            if (!product.quantity) {
-              product.quantity = 1
-            } else {
-              product.quantity++
-            }
             state.open = true
           }
         })
@@ -51,12 +40,29 @@ export const useCartStore = create((set) => {
           )
 
           if (indexProduct) {
-            if (!product.quantity) {
-              product.quantity = 1
-            } else {
-              product.quantity++
-            }
+            product.quantity++
             state.open = true
+          }
+        })
+      },
+
+      decrease(product) {
+        setState(({ state }) => {
+          const indexProduct = !!state.products.find(
+            ({ id }) => id === product.id
+          )
+
+          if (indexProduct) {
+            if (product.quantity > 1) {
+              product.quantity--
+              state.open = true
+            } else {
+              product.quantity = 0
+              state.products = state.products.filter(
+                ({ id }) => id !== product.id
+              )
+              state.open = true
+            }
           }
         })
       },
