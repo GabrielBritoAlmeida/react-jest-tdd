@@ -128,6 +128,21 @@ describe('Cart-Store', () => {
 
     act(() => {
       add(product)
+      increase(product)
+      increase(product)
+      decrease(product)
+    })
+
+    expect(product.quantity).toBe(2)
+
+    expect(result.current.state.products).toHaveLength(1)
+  })
+
+  it('should decrease with quantity one to cart', () => {
+    const product = server.create('product')
+
+    act(() => {
+      add(product)
       decrease(product)
     })
 
