@@ -1,7 +1,7 @@
 import { api } from '../../services/api'
 import { useCallback, useEffect, useState } from 'react'
 
-function GetProducts() {
+export function useGetProducts() {
   const [products, setProducts] = useState([])
   const [error, setError] = useState(false)
 
@@ -26,8 +26,4 @@ function GetProducts() {
   }, [getProducts])
 
   return { products, error }
-}
-
-export function useGetProducts() {
-  return GetProducts()
 }

@@ -82,8 +82,18 @@ describe('Cart-Store', () => {
   })
 
   it('should call removeAll() when remove button is clicked', async () => {
+    const products = server.createList('product', 2)
+
+    hooksAct(() => {
+      for (const product of products) {
+        add(product)
+      }
+    })
+
     await componentsAct(async () => {
       render(<Cart />)
+
+      expect(screen.getAllByTestId('cart-item')).toHaveLength(2)
 
       const buttonRemoveAll = screen.getByRole('button', {
         name: /clear cart/i
@@ -92,6 +102,7 @@ describe('Cart-Store', () => {
       userEvent.click(buttonRemoveAll)
 
       expect(spyRemoveAll).toHaveBeenCalledTimes(1)
+      expect(screen.queryAllByTestId('cart-item')).toHaveLength(0)
     })
   })
 })

@@ -12,6 +12,7 @@ describe('useGetProducts', () => {
 
   afterEach(() => {
     server.shutdown()
+    jest.clearAllMocks()
   })
 
   it('should return list of 10 products', async () => {
