@@ -105,4 +105,12 @@ describe('Cart-Store', () => {
       expect(screen.queryAllByTestId('cart-item')).toHaveLength(0)
     })
   })
+
+  it('should not display clear cart button if no products are in the cart', () => {
+    render(<Cart />)
+
+    expect(
+      screen.queryByRole('button', { name: /clear cart/i })
+    ).not.toBeInTheDocument()
+  })
 })
