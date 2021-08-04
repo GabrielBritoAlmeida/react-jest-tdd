@@ -34,7 +34,7 @@ export default function CartItem({ product }) {
               </svg>
             </button>
             <span data-testid="quantity" className="text-gray-700 mx-2">
-              {product.quantity}
+              {product?.quantity}
             </span>
             <button
               data-testid="button-increase"

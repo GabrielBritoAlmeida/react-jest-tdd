@@ -35,12 +35,12 @@ export const useCartStore = create((set) => {
 
       increase(product) {
         setState(({ state }) => {
-          const indexProduct = !!state.products.find(
+          const localProduct = state.products.find(
             ({ id }) => id === product.id
           )
 
-          if (indexProduct) {
-            product.quantity++
+          if (localProduct) {
+            localProduct.quantity++
             state.open = true
           }
         })
@@ -48,16 +48,16 @@ export const useCartStore = create((set) => {
 
       decrease(product) {
         setState(({ state }) => {
-          const indexProduct = !!state.products.find(
+          const localProduct = state.products.find(
             ({ id }) => id === product.id
           )
 
-          if (indexProduct) {
+          if (localProduct) {
             if (product.quantity > 1) {
-              product.quantity--
+              localProduct.quantity--
               state.open = true
             } else {
-              product.quantity = 0
+              localProduct.quantity = 0
               state.products = state.products.filter(
                 ({ id }) => id !== product.id
               )
