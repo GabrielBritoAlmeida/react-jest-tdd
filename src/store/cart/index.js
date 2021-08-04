@@ -26,7 +26,9 @@ export const useCartStore = create((set) => {
             ({ id }) => id === product.id
           )
           if (!indexProduct) {
-            product.quantity = 1
+            if (!product.quantity) {
+              product.quantity = 1
+            }
             state.products.push(product)
             state.open = true
           }
