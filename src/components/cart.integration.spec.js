@@ -1,10 +1,13 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act as hooksAct } from '@testing-library/react-hooks'
 import { screen, render } from '@testing-library/react'
 import { useCartStore } from '../store/cart'
 import { makeServer } from '../../miragejs/server'
 import { setAutoFreeze } from 'immer'
 import userEvent from '@testing-library/user-event'
 import Cart from './cart'
+import TestRenderer from 'react-test-renderer'
+
+const { act: componentsAct } = TestRenderer
 
 setAutoFreeze(false)
 
@@ -12,15 +15,15 @@ describe('Cart-Store', () => {
   let server
   let result
   let spyToggle
+  let spyRemoveAll
   let add
-  let toggle
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
     result = renderHook(() => useCartStore()).result
     add = result.current.actions.add
-    toggle = result.current.actions.toggle
     spyToggle = jest.spyOn(result.current.actions, 'toggle')
+    spyRemoveAll = jest.spyOn(result.current.actions, 'removeAll')
   })
 
   afterEach(() => {
@@ -38,33 +41,35 @@ describe('Cart-Store', () => {
     expect(screen.getByTestId('cart')).toHaveClass('hidden')
   })
 
-  it('should not add css class "hidden" in the component', () => {
-    render(<Cart />)
+  it('should not add css class "hidden" in the component', async () => {
+    await componentsAct(async () => {
+      render(<Cart />)
 
-    act(() => {
-      toggle()
+      const buttonClose = screen.getByTestId('button-close')
+
+      await userEvent.click(buttonClose)
+
+      expect(screen.getByTestId('cart')).not.toHaveClass('hidden')
     })
-
-    expect(screen.getByTestId('cart')).not.toHaveClass('hidden')
   })
 
-  it('should call store toggle twice', () => {
-    render(<Cart />)
+  it('should call store toggle twice', async () => {
+    await componentsAct(async () => {
+      render(<Cart />)
 
-    const button = screen.getByTestId('button-close')
+      const button = screen.getByTestId('button-close')
 
-    act(() => {
-      userEvent.click(button)
-      userEvent.click(button)
+      await userEvent.click(button)
+      await userEvent.click(button)
+
+      expect(spyToggle).toHaveBeenCalledTimes(2)
     })
-
-    expect(spyToggle).toHaveBeenCalledTimes(2)
   })
 
   it('should display 2 products cards', () => {
     const products = server.createList('product', 2)
 
-    act(() => {
+    hooksAct(() => {
       for (const product of products) {
         add(product)
       }
@@ -74,5 +79,19 @@ describe('Cart-Store', () => {
 
     const cardItem = screen.getAllByTestId('cart-item')
     expect(cardItem).toHaveLength(2)
+  })
+
+  it('should call removeAll() when remove button is clicked', async () => {
+    await componentsAct(async () => {
+      render(<Cart />)
+
+      const buttonRemoveAll = screen.getByRole('button', {
+        name: /clear cart/i
+      })
+
+      userEvent.click(buttonRemoveAll)
+
+      expect(spyRemoveAll).toHaveBeenCalledTimes(1)
+    })
   })
 })
