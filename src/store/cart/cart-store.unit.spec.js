@@ -9,6 +9,7 @@ describe('Cart-Store', () => {
   let toggle
   let remove
   let removeAll
+  let increase
 
   beforeEach(() => {
     server = makeServer({ environment: 'test' })
@@ -17,6 +18,7 @@ describe('Cart-Store', () => {
     toggle = result.current.actions.toggle
     remove = result.current.actions.remove
     removeAll = result.current.actions.removeAll
+    increase = result.current.actions.increase
   })
 
   afterEach(() => {
@@ -92,5 +94,30 @@ describe('Cart-Store', () => {
     act(() => removeAll())
 
     expect(result.current.state.products).toHaveLength(0)
+  })
+
+  it('should assign 1 as initial quantity on product add()', () => {
+    const [product1] = server.createList('product', 2)
+
+    act(() => {
+      add(product1)
+    })
+
+    expect(product1.quantity).toBe(1)
+
+    expect(result.current.state.products).toHaveLength(1)
+  })
+
+  fit('should increase quantity', () => {
+    const [product1] = server.createList('product', 2)
+
+    act(() => {
+      add(product1)
+      increase(product1)
+    })
+
+    expect(product1.quantity).toBe(2)
+
+    expect(result.current.state.products).toHaveLength(1)
   })
 })
