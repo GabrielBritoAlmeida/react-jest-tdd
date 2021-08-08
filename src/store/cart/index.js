@@ -43,7 +43,6 @@ export const useCartStore = create((set) => {
 
           if (localProduct) {
             localProduct.quantity++
-            state.open = true
           }
         })
       },
@@ -57,13 +56,11 @@ export const useCartStore = create((set) => {
           if (localProduct) {
             if (product.quantity > 1) {
               localProduct.quantity--
-              state.open = true
             } else {
               localProduct.quantity = 0
               state.products = state.products.filter(
                 ({ id }) => id !== product.id
               )
-              state.open = true
             }
           }
         })

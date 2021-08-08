@@ -1,9 +1,12 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderHook } from '@testing-library/react-hooks'
 import { useCartStore } from '../store/cart'
 import CartItem from './cart-item'
 import { setAutoFreeze } from 'immer'
+import TestRenderer from 'react-test-renderer'
+
+const { act: componentsAct } = TestRenderer
 
 setAutoFreeze(false)
 
@@ -19,6 +22,17 @@ const renderCartItem = () => {
 }
 
 describe('CartItem', () => {
+  let result
+
+  beforeEach(() => {
+    result = renderHook(() => useCartStore()).result
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+    act(() => result.current.actions.reset())
+  })
+
   it('should render CartItem', () => {
     renderCartItem()
 
@@ -37,8 +51,6 @@ describe('CartItem', () => {
   })
 
   it('should call remove() when remove button is clicked', () => {
-    const result = renderHook(() => useCartStore()).result
-
     const spy = jest.spyOn(result.current.actions, 'remove')
 
     renderCartItem()
@@ -46,6 +58,32 @@ describe('CartItem', () => {
     const buttonRemove = screen.getByRole('button', { name: /remove/i })
 
     userEvent.click(buttonRemove)
+
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledWith(product)
+  })
+
+  it('should call decrease() when decrease button is clicked', () => {
+    const spy = jest.spyOn(result.current.actions, 'decrease')
+
+    renderCartItem()
+
+    const buttonDecrease = screen.getByTestId('button-decrease')
+
+    userEvent.click(buttonDecrease)
+
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledWith(product)
+  })
+
+  it('should call increase() when increase button is clicked', () => {
+    const spy = jest.spyOn(result.current.actions, 'increase')
+
+    renderCartItem()
+
+    const buttonIncrease = screen.getByTestId('button-increase')
+
+    userEvent.click(buttonIncrease)
 
     expect(spy).toHaveBeenCalledTimes(1)
     expect(spy).toHaveBeenCalledWith(product)
